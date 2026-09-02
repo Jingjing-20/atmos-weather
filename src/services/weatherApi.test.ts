@@ -1,0 +1,118 @@
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { getWeatherByCity } from './weatherApi'
+import { WeatherApiError } from '../types/weather'
+
+const validPayload = {
+  name: 'Valladolid',
+  sys: { country: 'ES' },
+  main: { temp: 18.4, feels_like: 17.9 },
+  weather: [
+    {
+      main: 'Clouds',
+      description: 'scattered clouds',
+      icon: '03d',
+    },
+  ],
+}
+
+function jsonResponse(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  })
+}
+
+describe('getWeatherByCity', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs()
+    vi.unstubAllGlobals()
+    vi.restoreAllMocks()
+  })
+
+  it('returns mapped weather for a valid city', async () => {
+    vi.stubEnv('VITE_OPENWEATHER_API_KEY', 'test-key')
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse(validPayload))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const weather = await getWeatherByCity('Valladolid')
+
+    expect(weather).toEqual({
+      name: 'Valladolid',
+      country: 'ES',
+      temp: 18.4,
+      feelsLike: 17.9,
+      condition: {
+        main: 'Clouds',
+        description: 'scattered clouds',
+        icon: '03d',
+      },
+    })
+
+    const requested = new URL(fetchMock.mock.calls[0][0] as string)
+    expect(requested.origin + requested.pathname).toBe(
+      'https://api.openweathermap.org/data/2.5/weather',
+    )
+    expect(requested.searchParams.get('q')).toBe('Valladolid')
+    expect(requested.searchParams.get('units')).toBe('metric')
+    expect(requested.searchParams.get('appid')).toBe('test-key')
+  })
+
+  it('throws invalid_city when the API returns 404', async () => {
+    vi.stubEnv('VITE_OPENWEATHER_API_KEY', 'test-key')
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(jsonResponse({}, 404)))
+
+    const error = await getWeatherByCity('NotARealCity').catch((err: unknown) => err)
+
+    expect(error).toBeInstanceOf(WeatherApiError)
+    expect(error).toMatchObject({ code: 'invalid_city' })
+  })
+
+  it('throws missing_key when the API key is absent', async () => {
+    vi.stubEnv('VITE_OPENWEATHER_API_KEY', '')
+    const fetchMock = vi.fn()
+    vi.stubGlobal('fetch', fetchMock)
+
+    const error = await getWeatherByCity('Valladolid').catch((err: unknown) => err)
+
+    expect(error).toBeInstanceOf(WeatherApiError)
+    expect(error).toMatchObject({ code: 'missing_key' })
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
+  it('throws network when fetch fails', async () => {
+    vi.stubEnv('VITE_OPENWEATHER_API_KEY', 'test-key')
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('Failed to fetch')))
+
+    const error = await getWeatherByCity('Valladolid').catch((err: unknown) => err)
+
+    expect(error).toBeInstanceOf(WeatherApiError)
+    expect(error).toMatchObject({ code: 'network' })
+  })
+
+  it('throws invalid_response when the payload shape is unexpected', async () => {
+    vi.stubEnv('VITE_OPENWEATHER_API_KEY', 'test-key')
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(jsonResponse({ message: 'ok' })),
+    )
+
+    const error = await getWeatherByCity('Valladolid').catch((err: unknown) => err)
+
+    expect(error).toBeInstanceOf(WeatherApiError)
+    expect(error).toMatchObject({ code: 'invalid_response' })
+  })
+})
+
+describe.skipIf(import.meta.env.VITE_RUN_LIVE_API_TESTS !== 'true')(
+  'OpenWeather live API',
+  () => {
+    it('fetches Valladolid in metric units', async () => {
+      const weather = await getWeatherByCity('Valladolid')
+
+      expect(weather.name).toBe('Valladolid')
+      expect(weather.country).toBe('ES')
+      expect(Number.isFinite(weather.temp)).toBe(true)
+      expect(weather.condition.icon.length).toBeGreaterThan(0)
+    })
+  },
+)
