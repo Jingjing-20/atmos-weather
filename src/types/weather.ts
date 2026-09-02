@@ -9,6 +9,13 @@ export interface WeatherData {
   country: string
   temp: number
   feelsLike: number
+  humidity: number
+  windSpeed: number
+  pressure: number
+  visibility: number
+  sunrise: number
+  sunset: number
+  timezoneOffset: number
   condition: WeatherCondition
 }
 

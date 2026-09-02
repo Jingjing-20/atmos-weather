@@ -42,6 +42,14 @@ function parseWeatherData(payload: unknown): WeatherData {
   const main = isRecord(payload.main) ? payload.main : undefined
   const temp = main ? readNumber(main.temp) : undefined
   const feelsLike = main ? readNumber(main.feels_like) : undefined
+  const humidity = main ? readNumber(main.humidity) : undefined
+  const pressure = main ? readNumber(main.pressure) : undefined
+  const wind = isRecord(payload.wind) ? payload.wind : undefined
+  const windSpeed = wind ? readNumber(wind.speed) : undefined
+  const visibility = readNumber(payload.visibility)
+  const sunrise = sys ? readNumber(sys.sunrise) : undefined
+  const sunset = sys ? readNumber(sys.sunset) : undefined
+  const timezoneOffset = readNumber(payload.timezone)
   const weatherList = Array.isArray(payload.weather) ? payload.weather : []
   const firstCondition = isRecord(weatherList[0]) ? weatherList[0] : undefined
   const conditionMain = firstCondition ? readString(firstCondition.main) : undefined
@@ -55,6 +63,13 @@ function parseWeatherData(payload: unknown): WeatherData {
     !country ||
     temp === undefined ||
     feelsLike === undefined ||
+    humidity === undefined ||
+    windSpeed === undefined ||
+    pressure === undefined ||
+    visibility === undefined ||
+    sunrise === undefined ||
+    sunset === undefined ||
+    timezoneOffset === undefined ||
     !conditionMain ||
     !description ||
     !icon
@@ -70,6 +85,13 @@ function parseWeatherData(payload: unknown): WeatherData {
     country,
     temp,
     feelsLike,
+    humidity,
+    windSpeed,
+    pressure,
+    visibility,
+    sunrise,
+    sunset,
+    timezoneOffset,
     condition: {
       main: conditionMain,
       description,

@@ -4,8 +4,11 @@ import { WeatherApiError } from '../types/weather'
 
 const validPayload = {
   name: 'Valladolid',
-  sys: { country: 'ES' },
-  main: { temp: 18.4, feels_like: 17.9 },
+  sys: { country: 'ES', sunrise: 1_712_740_805, sunset: 1_712_745_638 },
+  main: { temp: 18.4, feels_like: 17.9, humidity: 65, pressure: 1_015 },
+  wind: { speed: 3.6 },
+  visibility: 10_000,
+  timezone: 7_200,
   weather: [
     {
       main: 'Clouds',
@@ -41,6 +44,13 @@ describe('getWeatherByCity', () => {
       country: 'ES',
       temp: 18.4,
       feelsLike: 17.9,
+      humidity: 65,
+      windSpeed: 3.6,
+      pressure: 1_015,
+      visibility: 10_000,
+      sunrise: 1_712_740_805,
+      sunset: 1_712_745_638,
+      timezoneOffset: 7_200,
       condition: {
         main: 'Clouds',
         description: 'scattered clouds',

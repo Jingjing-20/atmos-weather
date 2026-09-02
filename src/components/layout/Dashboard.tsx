@@ -1,4 +1,5 @@
 import { CurrentWeather } from '../weather/CurrentWeather'
+import { WeatherDetails } from '../weather/WeatherDetails'
 import { ErrorMessage } from '../ui/ErrorMessage'
 import { LoadingSkeleton } from '../ui/LoadingSkeleton'
 import { SearchBar } from '../ui/SearchBar'
@@ -14,7 +15,12 @@ export function Dashboard() {
       <SearchBar onSearch={search} />
       {isLoading && <LoadingSkeleton />}
       {!isLoading && error && <ErrorMessage message={error} onRetry={reload} />}
-      {!isLoading && weather && <CurrentWeather weather={weather} />}
+      {!isLoading && weather && (
+        <>
+          <CurrentWeather weather={weather} />
+          <WeatherDetails weather={weather} />
+        </>
+      )}
     </main>
   )
 }
