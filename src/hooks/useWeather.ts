@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { getWeatherByCity } from '../services/weatherApi'
 import type { WeatherData } from '../types/weather'
 
@@ -8,14 +8,61 @@ interface WeatherState {
   isLoading: boolean
 }
 
+const CACHE_DURATION_MS = 5 * 60 * 1000
+const weatherCache = new Map<string, { expiresAt: number; weather: WeatherData }>()
+const inFlightRequests = new Map<string, Promise<WeatherData>>()
+
+function getCityKey(city: string): string {
+  return city.trim().replaceAll(/\s+/g, ' ').toLocaleLowerCase()
+}
+
+async function getCachedWeather(city: string): Promise<WeatherData> {
+  const key = getCityKey(city)
+  const cached = weatherCache.get(key)
+
+  if (cached && cached.expiresAt > Date.now()) {
+    return cached.weather
+  }
+
+  if (cached) {
+    weatherCache.delete(key)
+  }
+
+  const existingRequest = inFlightRequests.get(key)
+  if (existingRequest) {
+    return existingRequest
+  }
+
+  const request = getWeatherByCity(city)
+  inFlightRequests.set(key, request)
+
+  try {
+    const weather = await request
+    weatherCache.set(key, { weather, expiresAt: Date.now() + CACHE_DURATION_MS })
+    return weather
+  } finally {
+    inFlightRequests.delete(key)
+  }
+}
+
+function getErrorMessage(error: unknown): string {
+  return error instanceof Error
+    ? error.message
+    : 'Unable to load weather right now. Please try again.'
+}
+
 export function useWeather(initialCity: string) {
   const [state, setState] = useState<WeatherState>({
     weather: null,
     error: null,
     isLoading: true,
   })
+  const requestId = useRef(0)
 
-  const reload = useCallback(async () => {
+  const search = useCallback(async (city: string) => {
+    const requestCity = city.trim()
+    const currentRequestId = ++requestId.current
+
     setState((currentState) => ({
       ...currentState,
       error: null,
@@ -23,28 +70,30 @@ export function useWeather(initialCity: string) {
     }))
 
     try {
-      const weather = await getWeatherByCity(initialCity)
-      setState({ weather, error: null, isLoading: false })
+      const weather = await getCachedWeather(requestCity)
+      if (currentRequestId === requestId.current) {
+        setState({ weather, error: null, isLoading: false })
+      }
     } catch (error: unknown) {
-      const message =
-        error instanceof Error
-          ? error.message
-          : 'Unable to load weather right now. Please try again.'
-
-      setState((currentState) => ({
-        ...currentState,
-        error: message,
-        isLoading: false,
-      }))
+      if (currentRequestId === requestId.current) {
+        setState((currentState) => ({
+          ...currentState,
+          error: getErrorMessage(error),
+          isLoading: false,
+        }))
+      }
     }
-  }, [initialCity])
+  }, [])
+
+  const reload = useCallback(() => search(initialCity), [initialCity, search])
 
   useEffect(() => {
     let isActive = true
+    const currentRequestId = ++requestId.current
 
-    void getWeatherByCity(initialCity)
+    void getCachedWeather(initialCity)
       .then((weather) => {
-        if (isActive) {
+        if (isActive && currentRequestId === requestId.current) {
           setState({ weather, error: null, isLoading: false })
         }
       })
@@ -53,11 +102,7 @@ export function useWeather(initialCity: string) {
           return
         }
 
-        const message =
-          error instanceof Error
-            ? error.message
-            : 'Unable to load weather right now. Please try again.'
-        setState({ weather: null, error: message, isLoading: false })
+        setState({ weather: null, error: getErrorMessage(error), isLoading: false })
       })
 
     return () => {
@@ -65,5 +110,5 @@ export function useWeather(initialCity: string) {
     }
   }, [initialCity])
 
-  return { ...state, reload }
+  return { ...state, reload, search }
 }
