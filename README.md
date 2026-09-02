@@ -1,78 +1,48 @@
-# React + TypeScript + Vite
+# Atmos Weather
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive weather app built with React, TypeScript, and Vite. It uses the OpenWeatherMap current weather and 5-day/3-hour forecast APIs.
 
-Currently, two official plugins are available:
+**Live:** deployed on [Vercel](https://github.com/Jingjing-20/atmos-weather)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Stack
 
-## React Compiler
+- React + TypeScript + Vite
+- Tailwind CSS
+- Lucide icons
+- OpenWeatherMap API (`/data/2.5/weather` and `/data/2.5/forecast`)
+- Vercel (hosting + Analytics)
+- GitHub Actions CI
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## Setup
 
-Note: This will impact Vite dev & build performances.
-You can also try [the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler) by using `compiler: true` in the plugin options instead of using the Babel plugin.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+cp .env.example .env
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Put your OpenWeatherMap API key in `.env`:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```env
+VITE_OPENWEATHER_API_KEY=your_api_key_here
 ```
+
+```bash
+npm run dev
+```
+
+## API key (what `.env` does and does not hide)
+
+`VITE_` variables are inlined into the client bundle at build time. Keeping the key out of git hides it from the **repository**, not from anyone who opens the live site (network tab or bundled JS).
+
+That is an acceptable tradeoff for this portfolio app: a free-tier, rate-limited weather key with no billing attached. Tighter secrecy would mean a small serverless proxy that holds the key on the server — `.gitignore` alone cannot provide that.
+
+Production also needs the same variable in the Vercel project settings. The local `.env` file is gitignored and is not deployed.
+
+## Scripts
+
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Dev server |
+| `npm run build` | Typecheck and production build |
+| `npm run lint` | ESLint |
+| `npm test` | Vitest (single run) |
