@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { getWeatherByCity } from './weatherApi'
+import { getForecastByCity, getWeatherByCity } from './weatherApi'
 import { WeatherApiError } from '../types/weather'
 
 const validPayload = {
@@ -14,6 +14,18 @@ const validPayload = {
       main: 'Clouds',
       description: 'scattered clouds',
       icon: '03d',
+    },
+  ],
+}
+
+const validForecastPayload = {
+  city: { name: 'Valladolid', country: 'ES', timezone: 7_200 },
+  list: [
+    {
+      dt: 1_712_745_200,
+      main: { temp: 19.2, temp_min: 18.1, temp_max: 20.3 },
+      weather: [{ main: 'Clouds', description: 'broken clouds', icon: '04d' }],
+      pop: 0.25,
     },
   ],
 }
@@ -111,6 +123,23 @@ describe('getWeatherByCity', () => {
     expect(error).toBeInstanceOf(WeatherApiError)
     expect(error).toMatchObject({ code: 'invalid_response' })
   })
+
+  it('returns a typed metric forecast', async () => {
+    vi.stubEnv('VITE_OPENWEATHER_API_KEY', 'test-key')
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse(validForecastPayload))
+    vi.stubGlobal('fetch', fetchMock)
+
+    await expect(getForecastByCity('Valladolid')).resolves.toMatchObject({
+      name: 'Valladolid',
+      country: 'ES',
+      timezoneOffset: 7_200,
+      entries: [{ temp: 19.2, precipitationProbability: 0.25 }],
+    })
+
+    const requested = new URL(fetchMock.mock.calls[0][0] as string)
+    expect(requested.pathname).toBe('/data/2.5/forecast')
+    expect(requested.searchParams.get('units')).toBe('metric')
+  })
 })
 
 describe.skipIf(import.meta.env.VITE_RUN_LIVE_API_TESTS !== 'true')(
@@ -123,6 +152,14 @@ describe.skipIf(import.meta.env.VITE_RUN_LIVE_API_TESTS !== 'true')(
       expect(weather.country).toBe('ES')
       expect(Number.isFinite(weather.temp)).toBe(true)
       expect(weather.condition.icon.length).toBeGreaterThan(0)
+    })
+
+    it('fetches the Valladolid forecast', async () => {
+      const forecast = await getForecastByCity('Valladolid')
+
+      expect(forecast.name).toBe('Valladolid')
+      expect(forecast.entries.length).toBeGreaterThan(0)
+      expect(Number.isFinite(forecast.entries[0].temp)).toBe(true)
     })
   },
 )

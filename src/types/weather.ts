@@ -19,6 +19,22 @@ export interface WeatherData {
   condition: WeatherCondition
 }
 
+export interface ForecastEntry {
+  timestamp: number
+  temp: number
+  tempMin: number
+  tempMax: number
+  precipitationProbability: number
+  condition: WeatherCondition
+}
+
+export interface ForecastData {
+  name: string
+  country: string
+  timezoneOffset: number
+  entries: ForecastEntry[]
+}
+
 export type WeatherApiErrorCode =
   | 'missing_key'
   | 'invalid_city'

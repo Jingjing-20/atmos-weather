@@ -1,9 +1,12 @@
 import {
   WeatherApiError,
+  type ForecastData,
+  type ForecastEntry,
   type WeatherData,
 } from '../types/weather'
 
 const WEATHER_URL = 'https://api.openweathermap.org/data/2.5/weather'
+const FORECAST_URL = 'https://api.openweathermap.org/data/2.5/forecast'
 
 function getApiKey(): string {
   const key = import.meta.env.VITE_OPENWEATHER_API_KEY?.trim()
@@ -111,11 +114,11 @@ async function readJson(response: Response): Promise<unknown> {
   }
 }
 
-export async function getWeatherByCity(city: string): Promise<WeatherData> {
+async function fetchWeatherPayload(city: string, endpoint: string): Promise<unknown> {
   const apiKey = getApiKey()
   const query = city.trim()
 
-  const url = new URL(WEATHER_URL)
+  const url = new URL(endpoint)
   url.searchParams.set('q', query)
   url.searchParams.set('units', 'metric')
   url.searchParams.set('appid', apiKey)
@@ -144,6 +147,68 @@ export async function getWeatherByCity(city: string): Promise<WeatherData> {
     )
   }
 
-  const payload = await readJson(response)
-  return parseWeatherData(payload)
+  return readJson(response)
+}
+
+function parseForecastEntry(value: unknown): ForecastEntry {
+  if (!isRecord(value)) {
+    throw new WeatherApiError('Forecast response was missing expected fields.', 'invalid_response')
+  }
+
+  const timestamp = readNumber(value.dt)
+  const main = isRecord(value.main) ? value.main : undefined
+  const temp = main ? readNumber(main.temp) : undefined
+  const tempMin = main ? readNumber(main.temp_min) : undefined
+  const tempMax = main ? readNumber(main.temp_max) : undefined
+  const weatherList = Array.isArray(value.weather) ? value.weather : []
+  const condition = isRecord(weatherList[0]) ? weatherList[0] : undefined
+  const conditionMain = condition ? readString(condition.main) : undefined
+  const description = condition ? readString(condition.description) : undefined
+  const icon = condition ? readString(condition.icon) : undefined
+
+  if (
+    timestamp === undefined ||
+    temp === undefined ||
+    tempMin === undefined ||
+    tempMax === undefined ||
+    !conditionMain ||
+    !description ||
+    !icon
+  ) {
+    throw new WeatherApiError('Forecast response was missing expected fields.', 'invalid_response')
+  }
+
+  return {
+    timestamp,
+    temp,
+    tempMin,
+    tempMax,
+    precipitationProbability: readNumber(value.pop) ?? 0,
+    condition: { main: conditionMain, description, icon },
+  }
+}
+
+function parseForecastData(payload: unknown): ForecastData {
+  if (!isRecord(payload) || !isRecord(payload.city) || !Array.isArray(payload.list)) {
+    throw new WeatherApiError('Forecast response was not valid.', 'invalid_response')
+  }
+
+  const name = readString(payload.city.name)
+  const country = readString(payload.city.country)
+  const timezoneOffset = readNumber(payload.city.timezone)
+  const entries = payload.list.map(parseForecastEntry)
+
+  if (!name || !country || timezoneOffset === undefined || entries.length === 0) {
+    throw new WeatherApiError('Forecast response was missing expected fields.', 'invalid_response')
+  }
+
+  return { name, country, timezoneOffset, entries }
+}
+
+export async function getWeatherByCity(city: string): Promise<WeatherData> {
+  return parseWeatherData(await fetchWeatherPayload(city, WEATHER_URL))
+}
+
+export async function getForecastByCity(city: string): Promise<ForecastData> {
+  return parseForecastData(await fetchWeatherPayload(city, FORECAST_URL))
 }
