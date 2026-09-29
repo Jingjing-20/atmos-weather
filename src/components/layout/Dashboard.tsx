@@ -7,6 +7,7 @@ import { LoadingSkeleton } from '../ui/LoadingSkeleton'
 import { SearchBar } from '../ui/SearchBar'
 import { useWeather } from '../../hooks/useWeather'
 import { useForecast } from '../../hooks/useForecast'
+import { TEXT, cn } from '../../lib/utils'
 
 const INITIAL_CITY = 'Valladolid'
 
@@ -16,19 +17,21 @@ export function Dashboard() {
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6">
-      <SearchBar onSearch={search} />
+      <SearchBar onSearch={(city) => { void search(city) }} />
       {isLoading && <LoadingSkeleton />}
-      {!isLoading && error && <ErrorMessage message={error} onRetry={reload} />}
+      {!isLoading && error && <ErrorMessage message={error} onRetry={() => { void reload() }} />}
       {!isLoading && weather && (
         <>
           <CurrentWeather weather={weather} />
           <WeatherDetails weather={weather} />
           {isForecastLoading && (
-            <p className="text-sm text-slate-500" aria-live="polite">
+            <p className={cn('text-sm', TEXT, 'opacity-70')} aria-live="polite">
               Loading forecast…
             </p>
           )}
-          {forecastError && <p className="text-sm text-rose-700">Forecast unavailable: {forecastError}</p>}
+          {forecastError && (
+            <p className="text-sm text-destructive">Forecast unavailable: {forecastError}</p>
+          )}
           {forecast?.name === weather.name && (
             <>
               <HourlyForecast forecast={forecast} />

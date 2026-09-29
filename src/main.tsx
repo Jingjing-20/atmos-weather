@@ -1,12 +1,15 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { Analytics } from "@vercel/analytics/react"
+import { ThemeProvider } from 'next-themes'
+import { Analytics } from '@vercel/analytics/react'
 import './index.css'
 import App from './App.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Analytics />
-    <App />
+    <ThemeProvider attribute={['class', 'data-theme']} defaultTheme="system" enableSystem>
+      <Analytics />
+      <App />
+    </ThemeProvider>
   </StrictMode>,
 )

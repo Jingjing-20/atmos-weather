@@ -7,7 +7,7 @@ A modern, responsive weather app built with React, TypeScript, and Vite. It uses
 ## Stack
 
 - React + TypeScript + Vite
-- Tailwind CSS
+- Tailwind CSS + daisyUI (Geist Mono, bordered cards, light/dark — same chrome as porpolyo)
 - Lucide icons
 - OpenWeatherMap API (`/data/2.5/weather` and `/data/2.5/forecast`)
 - Vercel (hosting + Analytics)

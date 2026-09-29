@@ -1,5 +1,6 @@
 import { Search } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { CHROME, cn, FOCUS_RING, TEXT } from '../../lib/utils'
 
 interface SearchBarProps {
   onSearch: (city: string) => void
@@ -52,7 +53,13 @@ export function SearchBar({ onSearch }: SearchBarProps) {
       </label>
       <div className="flex gap-2">
         <input
-          className="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-sky-600 focus:ring-3 focus:ring-sky-100"
+          className={cn(
+            'min-w-0 flex-1 rounded-md bg-textured px-4 py-3 shadow-xl',
+            CHROME,
+            TEXT,
+            FOCUS_RING,
+            'placeholder:text-base-content/40',
+          )}
           id="city-search"
           type="search"
           value={city}
@@ -62,7 +69,12 @@ export function SearchBar({ onSearch }: SearchBarProps) {
           aria-invalid={Boolean(validationError)}
         />
         <button
-          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-sky-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 sm:px-5"
+          className={cn(
+            'hover-theme-switch inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md bg-textured px-4 py-3 text-sm font-semibold shadow-xl sm:px-5',
+            CHROME,
+            TEXT,
+            FOCUS_RING,
+          )}
           type="submit"
         >
           <Search className="size-4" aria-hidden="true" />
@@ -71,7 +83,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
         </button>
       </div>
       {validationError && (
-        <p id="city-search-error" className="mt-2 text-sm text-rose-700" role="alert">
+        <p id="city-search-error" className="mt-2 text-sm text-destructive" role="alert">
           {validationError}
         </p>
       )}

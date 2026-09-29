@@ -1,16 +1,31 @@
 import { CloudSun } from 'lucide-react'
+import { CHROME, cn, TEXT } from '../../lib/utils'
+import { ThemeToggle } from '../ui/ThemeToggle'
 
 export function Header() {
   return (
-    <header className="border-b border-slate-200/80 bg-white/80 backdrop-blur-md">
-      <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 py-4 sm:px-6">
-        <CloudSun className="size-8 shrink-0 text-sky-600" aria-hidden="true" />
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight text-slate-900">
-            Atmos Weather
-          </h1>
-          <p className="text-sm text-slate-500">Current conditions at a glance</p>
+    <header className={cn('sticky top-0 z-20 bg-textured/90 backdrop-blur-md', CHROME, 'border-x-0 border-t-0')}>
+      <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+        <div className="flex min-w-0 items-center gap-3">
+          <span
+            className={cn(
+              'inline-flex size-9 shrink-0 items-center justify-center rounded-md bg-textured shadow-xl',
+              CHROME,
+            )}
+            aria-hidden="true"
+          >
+            <CloudSun className="size-5" />
+          </span>
+          <div className="min-w-0">
+            <h1 className={cn('truncate text-lg font-bold tracking-tight sm:text-xl', TEXT)}>
+              Atmos Weather
+            </h1>
+            <p className={cn('truncate text-[10px] sm:text-xs', TEXT, 'opacity-70')}>
+              Current conditions at a glance
+            </p>
+          </div>
         </div>
+        <ThemeToggle />
       </div>
     </header>
   )

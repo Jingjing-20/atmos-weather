@@ -9,6 +9,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import type { WeatherData } from '../../types/weather'
+import { cn, SECTION_HEADING, SURFACE, TEXT } from '../../lib/utils'
 
 interface WeatherDetailsProps {
   weather: WeatherData
@@ -46,15 +47,15 @@ export function WeatherDetails({ weather }: WeatherDetailsProps) {
 
   return (
     <section aria-labelledby="weather-details-heading">
-      <h2 id="weather-details-heading" className="text-lg font-semibold text-slate-900">
+      <h2 id="weather-details-heading" className={SECTION_HEADING}>
         Weather details
       </h2>
       <dl className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {details.map(({ icon: Icon, label, value }) => (
-          <div key={label} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <Icon className="size-5 text-sky-600" aria-hidden="true" />
-            <dt className="mt-3 text-sm text-slate-500">{label}</dt>
-            <dd className="mt-1 text-lg font-semibold tracking-tight text-slate-900">{value}</dd>
+          <div key={label} className={cn(SURFACE, 'hover-card p-4')}>
+            <Icon className="size-5" aria-hidden="true" />
+            <dt className={cn('mt-3 text-sm', TEXT, 'opacity-70')}>{label}</dt>
+            <dd className={cn('mt-1 text-lg font-semibold tracking-tight', TEXT)}>{value}</dd>
           </div>
         ))}
       </dl>

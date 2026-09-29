@@ -1,4 +1,5 @@
 import type { ForecastData } from '../../types/weather'
+import { CHROME, cn, SECTION_HEADING, SURFACE, TEXT } from '../../lib/utils'
 
 interface WeeklyForecastProps {
   forecast: ForecastData
@@ -56,23 +57,32 @@ export function WeeklyForecast({ forecast }: WeeklyForecastProps) {
 
   return (
     <section aria-labelledby="weekly-forecast-heading">
-      <h2 id="weekly-forecast-heading" className="text-lg font-semibold text-slate-900">
+      <h2 id="weekly-forecast-heading" className={SECTION_HEADING}>
         5-day outlook
       </h2>
-      <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div className={cn(SURFACE, 'mt-3 overflow-hidden')}>
         {days.map((day) => (
-          <article key={day.date} className="flex items-center gap-3 border-b border-slate-100 px-4 py-3 last:border-b-0">
-            <p className="w-12 text-sm font-medium text-slate-700">{formatDay(day.date)}</p>
+          <article
+            key={day.date}
+            className={cn(
+              'hover-list-item flex items-center gap-3 border-b px-4 py-3 last:border-b-0',
+              CHROME,
+              'border-x-0 border-t-0',
+            )}
+          >
+            <p className={cn('w-12 text-sm font-medium', TEXT)}>{formatDay(day.date)}</p>
             <img
               className="size-9"
               src={`https://openweathermap.org/img/wn/${day.icon}.png`}
               alt={day.description}
             />
-            <p className="min-w-0 flex-1 text-sm text-sky-700">{Math.round(day.maxRain * 100)}% rain</p>
-            <div className="text-right text-sm tabular-nums text-slate-700">
-              <span>{Math.round(day.min)}°</span>
-              <span className="mx-2 inline-block h-1.5 w-12 rounded-full bg-gradient-to-r from-sky-300 to-orange-300 align-middle" />
-              <span className="font-semibold text-slate-900">{Math.round(day.max)}°</span>
+            <p className={cn('min-w-0 flex-1 text-sm', TEXT, 'opacity-70')}>
+              {Math.round(day.maxRain * 100)}% rain
+            </p>
+            <div className={cn('text-right text-sm tabular-nums', TEXT)}>
+              <span className="opacity-70">{Math.round(day.min)}°</span>
+              <span className="mx-2 inline-block h-1.5 w-12 rounded-full bg-base-content/20 align-middle" />
+              <span className="font-semibold">{Math.round(day.max)}°</span>
             </div>
           </article>
         ))}

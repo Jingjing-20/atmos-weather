@@ -3,7 +3,7 @@ import { Header } from './components/layout/Header'
 
 function App() {
   return (
-    <div className="flex min-h-svh flex-col bg-slate-50">
+    <div className="custom-background relative flex min-h-svh flex-col">
       <Header />
       <Dashboard />
     </div>

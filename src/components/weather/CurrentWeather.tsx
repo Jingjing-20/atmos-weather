@@ -1,4 +1,5 @@
 import type { WeatherData } from '../../types/weather'
+import { CHROME, cn, TEXT } from '../../lib/utils'
 
 interface CurrentWeatherProps {
   weather: WeatherData
@@ -7,13 +8,13 @@ interface CurrentWeatherProps {
 export function CurrentWeather({ weather }: CurrentWeatherProps) {
   return (
     <section
-      className="overflow-hidden rounded-3xl bg-gradient-to-br from-sky-500 via-sky-600 to-blue-700 p-6 text-white shadow-lg shadow-sky-950/15 sm:p-8"
+      className={cn('overflow-hidden rounded-xl bg-gradient-card p-6 shadow-xl sm:p-8', CHROME)}
       aria-labelledby="current-weather-heading"
     >
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-sm font-medium text-sky-100">Current weather</p>
-          <h2 id="current-weather-heading" className="mt-1 text-2xl font-semibold tracking-tight sm:text-3xl">
+          <p className={cn('text-sm font-medium', TEXT, 'opacity-70')}>Current weather</p>
+          <h2 id="current-weather-heading" className={cn('mt-1 text-2xl font-bold tracking-tight sm:text-3xl', TEXT)}>
             {weather.name}, {weather.country}
           </h2>
         </div>
@@ -25,15 +26,15 @@ export function CurrentWeather({ weather }: CurrentWeatherProps) {
       </div>
 
       <div className="mt-6 flex items-end gap-4">
-        <p className="text-6xl font-semibold tracking-tighter sm:text-7xl">
+        <p className={cn('text-6xl font-semibold tracking-tighter sm:text-7xl', TEXT)}>
           {Math.round(weather.temp)}°
         </p>
-        <p className="pb-2 text-base capitalize text-sky-100 sm:text-lg">
+        <p className={cn('pb-2 text-base capitalize sm:text-lg', TEXT, 'opacity-70')}>
           {weather.condition.description}
         </p>
       </div>
 
-      <p className="mt-5 border-t border-white/20 pt-4 text-sm text-sky-100">
+      <p className={cn('mt-5 border-t border-gray-300 pt-4 text-sm dark:border-white/20', TEXT, 'opacity-70')}>
         Feels like {Math.round(weather.feelsLike)}°C
       </p>
     </section>

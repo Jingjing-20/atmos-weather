@@ -1,3 +1,5 @@
+import { CHROME, cn, FOCUS_RING, TEXT } from '../../lib/utils'
+
 interface ErrorMessageProps {
   message: string
   onRetry: () => void
@@ -6,16 +8,21 @@ interface ErrorMessageProps {
 export function ErrorMessage({ message, onRetry }: ErrorMessageProps) {
   return (
     <section
-      className="rounded-2xl border border-rose-200 bg-rose-50 p-6 text-center"
+      className={cn('rounded-xl bg-textured p-6 text-center shadow-xl', CHROME)}
       aria-labelledby="weather-error-heading"
       role="alert"
     >
-      <h2 id="weather-error-heading" className="text-lg font-semibold text-rose-950">
+      <h2 id="weather-error-heading" className={cn('text-lg font-semibold', TEXT)}>
         Weather is unavailable
       </h2>
-      <p className="mt-2 text-sm text-rose-800">{message}</p>
+      <p className={cn('mt-2 text-sm', TEXT, 'opacity-70')}>{message}</p>
       <button
-        className="mt-5 rounded-lg bg-rose-700 px-4 py-2 text-sm font-medium text-white transition hover:bg-rose-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+        className={cn(
+          'hover-theme-switch mt-5 cursor-pointer rounded-md bg-textured px-4 py-2 text-sm font-medium shadow-xl',
+          CHROME,
+          TEXT,
+          FOCUS_RING,
+        )}
         type="button"
         onClick={onRetry}
       >
