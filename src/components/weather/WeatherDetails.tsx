@@ -50,7 +50,7 @@ export function WeatherDetails({ weather }: WeatherDetailsProps) {
       <h2 id="weather-details-heading" className={SECTION_HEADING}>
         Weather details
       </h2>
-      <dl className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+      <dl className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4 xl:grid-cols-7">
         {details.map(({ icon: Icon, label, value }) => (
           <div key={label} className={cn(SURFACE, 'hover-card p-4')}>
             <Icon className="size-5" aria-hidden="true" />

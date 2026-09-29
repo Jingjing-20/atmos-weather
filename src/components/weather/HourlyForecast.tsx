@@ -22,7 +22,7 @@ export function HourlyForecast({ forecast }: HourlyForecastProps) {
         {forecast.entries.slice(0, 8).map((entry) => (
           <article
             key={entry.timestamp}
-            className={cn(SURFACE, 'hover-badge min-w-24 px-3 py-4 text-center')}
+            className={cn(SURFACE, 'hover-theme-switch min-w-24 px-3 py-4 text-center')}
           >
             <p className={cn('text-sm font-medium', TEXT, 'opacity-70')}>
               {formatTime(entry.timestamp, forecast.timezoneOffset)}

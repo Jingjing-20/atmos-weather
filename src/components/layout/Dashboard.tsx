@@ -16,29 +16,46 @@ export function Dashboard() {
   const { forecast, error: forecastError, isLoading: isForecastLoading } = useForecast(weather?.name ?? null)
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6">
-      <SearchBar onSearch={(city) => { void search(city) }} />
+    <main className="mx-auto flex w-full max-w-[1600px] flex-1 flex-col gap-5 px-4 py-6 sm:px-6 lg:px-8">
       {isLoading && <LoadingSkeleton />}
       {!isLoading && error && <ErrorMessage message={error} onRetry={() => { void reload() }} />}
       {!isLoading && weather && (
-        <>
-          <CurrentWeather weather={weather} />
-          <WeatherDetails weather={weather} />
-          {isForecastLoading && (
-            <p className={cn('text-sm', TEXT, 'opacity-70')} aria-live="polite">
-              Loading forecast…
-            </p>
-          )}
-          {forecastError && (
-            <p className="text-sm text-destructive">Forecast unavailable: {forecastError}</p>
-          )}
-          {forecast?.name === weather.name && (
+        (() => {
+          const forecastReady = forecast?.name === weather.name
+
+          return (
             <>
-              <HourlyForecast forecast={forecast} />
-              <WeeklyForecast forecast={forecast} />
+              <section
+                aria-labelledby="dashboard-content-heading"
+                className="grid flex-1 grid-cols-1 gap-5 xl:grid-cols-12"
+              >
+                <h2 id="dashboard-content-heading" className="sr-only">Weather overview</h2>
+
+                <div className="flex flex-col gap-5 xl:col-span-6">
+                  <CurrentWeather weather={weather} />
+                </div>
+
+                <div className="flex flex-col gap-5 xl:col-span-6">
+                  <SearchBar onSearch={(city) => { void search(city) }} />
+                  {forecastReady && <HourlyForecast forecast={forecast} />}
+                  {!forecastReady && isForecastLoading && (
+                    <p className={cn('text-sm', TEXT, 'opacity-70')} aria-live="polite">
+                      Loading forecast…
+                    </p>
+                  )}
+                  {forecastError && (
+                    <p className="text-sm text-destructive">Forecast unavailable: {forecastError}</p>
+                  )}
+                  {forecastReady && <WeeklyForecast forecast={forecast} />}
+                </div>
+              </section>
+
+              <section className="w-full">
+                <WeatherDetails weather={weather} />
+              </section>
             </>
-          )}
-        </>
+          )
+        })()
       )}
     </main>
   )

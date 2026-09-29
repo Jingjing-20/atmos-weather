@@ -45,6 +45,8 @@ function parseWeatherData(payload: unknown): WeatherData {
   const main = isRecord(payload.main) ? payload.main : undefined
   const temp = main ? readNumber(main.temp) : undefined
   const feelsLike = main ? readNumber(main.feels_like) : undefined
+  const tempMin = main ? readNumber(main.temp_min) : undefined
+  const tempMax = main ? readNumber(main.temp_max) : undefined
   const humidity = main ? readNumber(main.humidity) : undefined
   const pressure = main ? readNumber(main.pressure) : undefined
   const wind = isRecord(payload.wind) ? payload.wind : undefined
@@ -66,6 +68,8 @@ function parseWeatherData(payload: unknown): WeatherData {
     !country ||
     temp === undefined ||
     feelsLike === undefined ||
+    tempMin === undefined ||
+    tempMax === undefined ||
     humidity === undefined ||
     windSpeed === undefined ||
     pressure === undefined ||
@@ -88,6 +92,8 @@ function parseWeatherData(payload: unknown): WeatherData {
     country,
     temp,
     feelsLike,
+    tempMin,
+    tempMax,
     humidity,
     windSpeed,
     pressure,
