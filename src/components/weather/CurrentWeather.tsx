@@ -41,11 +41,11 @@ export function CurrentWeather({ weather }: CurrentWeatherProps) {
         </p>
         <div className="flex items-center gap-3">
           <span className={cn('inline-flex items-center gap-1 text-sm sm:text-base', TEXT, 'opacity-70')}>
-            <ArrowDown className="size-4 text-blue-500" aria-hidden="true" />
+            <ArrowDown className="size-4" aria-hidden="true" />
             <span className={cn('font-semibold', TEXT, 'opacity-100')}>{Math.round(weather.tempMin)}°</span>
           </span>
           <span className={cn('inline-flex items-center gap-1 text-sm sm:text-base', TEXT, 'opacity-70')}>
-            <ArrowUp className="size-4 text-red-500" aria-hidden="true" />
+            <ArrowUp className="size-4" aria-hidden="true" />
             <span className={cn('font-semibold', TEXT, 'opacity-100')}>{Math.round(weather.tempMax)}°</span>
           </span>
         </div>
@@ -54,7 +54,7 @@ export function CurrentWeather({ weather }: CurrentWeatherProps) {
       <div className="mt-6 grid flex-1 grid-cols-2 gap-3 sm:grid-cols-3">
         <div className="flex flex-col gap-1 rounded-lg bg-black/5 p-4 dark:bg-white/5">
           <div className="flex items-center gap-2">
-            <Thermometer className="size-5 text-orange-500" aria-hidden="true" />
+            <Thermometer className="size-5" aria-hidden="true" />
             <span className={cn('text-xs sm:text-sm font-medium', TEXT, 'opacity-70')}>Feels</span>
           </div>
           <p className={cn('mt-1 text-xl font-semibold tracking-tight sm:text-2xl', TEXT)}>
@@ -64,7 +64,7 @@ export function CurrentWeather({ weather }: CurrentWeatherProps) {
 
         <div className="flex flex-col gap-1 rounded-lg bg-black/5 p-4 dark:bg-white/5">
           <div className="flex items-center gap-2">
-            <Droplets className="size-5 text-blue-500" aria-hidden="true" />
+            <Droplets className="size-5" aria-hidden="true" />
             <span className={cn('text-xs sm:text-sm font-medium', TEXT, 'opacity-70')}>Humidity</span>
           </div>
           <p className={cn('mt-1 text-xl font-semibold tracking-tight sm:text-2xl', TEXT)}>
@@ -74,7 +74,7 @@ export function CurrentWeather({ weather }: CurrentWeatherProps) {
 
         <div className="flex flex-col gap-1 rounded-lg bg-black/5 p-4 dark:bg-white/5">
           <div className="flex items-center gap-2">
-            <Wind className="size-5 text-cyan-500" aria-hidden="true" />
+            <Wind className="size-5" aria-hidden="true" />
             <span className={cn('text-xs sm:text-sm font-medium', TEXT, 'opacity-70')}>Wind</span>
           </div>
           <p className={cn('mt-1 text-xl font-semibold tracking-tight sm:text-2xl', TEXT)}>
@@ -84,7 +84,7 @@ export function CurrentWeather({ weather }: CurrentWeatherProps) {
 
         <div className="flex flex-col gap-1 rounded-lg bg-black/5 p-4 dark:bg-white/5">
           <div className="flex items-center gap-2">
-            <Gauge className="size-5 text-purple-500" aria-hidden="true" />
+            <Gauge className="size-5" aria-hidden="true" />
             <span className={cn('text-xs sm:text-sm font-medium', TEXT, 'opacity-70')}>Pressure</span>
           </div>
           <p className={cn('mt-1 text-xl font-semibold tracking-tight sm:text-2xl', TEXT)}>
@@ -94,7 +94,7 @@ export function CurrentWeather({ weather }: CurrentWeatherProps) {
 
         <div className="col-span-2 flex flex-col gap-1 rounded-lg bg-black/5 p-4 dark:bg-white/5 sm:col-span-1">
           <div className="flex items-center gap-2">
-            <Thermometer className="size-5 text-pink-500" aria-hidden="true" />
+            <Thermometer className="size-5" aria-hidden="true" />
             <span className={cn('text-xs sm:text-sm font-medium', TEXT, 'opacity-70')}>Min / Max</span>
           </div>
           <p className={cn('mt-1 text-xl font-semibold tracking-tight sm:text-2xl', TEXT)}>
