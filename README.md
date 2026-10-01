@@ -1,169 +1,53 @@
 # Atmos Weather
 
-A modern, responsive weather application that delivers real-time weather information and forecasts with a clean, intuitive interface. Built as a portfolio project demonstrating React development best practices, TypeScript proficiency, and thoughtful API integration.
+Weather Forecasting Web Application
 
-🌐 **[Live Demo](https://atmos-weather-omega.vercel.app/)** — Deployed on Vercel
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![daisyUI](https://img.shields.io/badge/daisyUI-5A0EF8?style=for-the-badge&logo=daisyui&logoColor=white)
+
+## Description
+
+A modern, responsive weather application that provides current weather information and forecasts using the OpenWeatherMap API. Designed as a portfolio-quality project demonstrating professional development practices.
+
+## Purpose
+
+Demonstrate modern web development skills through a production-ready weather application featuring React, TypeScript, API integration, clean architecture, responsive UI/UX, and professional Git workflows with CI/CD deployment.
 
 ## Features
 
-- **Real-time Weather Data** — Current conditions including temperature, humidity, wind speed, pressure, and visibility
-- **Search by City** — Find weather information for any city worldwide
-- **Hourly & Weekly Forecasts** — View upcoming weather trends with 3-hour intervals up to 5 days ahead
-- **Responsive Design** — Seamless experience across mobile, tablet, and desktop devices
-- **Dark Mode** — Toggle between light and dark themes for comfortable viewing
-- **Loading & Error States** — Thoughtful user experience with skeleton loaders and clear error messages
+- Real-time weather data for any city worldwide with search functionality
+- Detailed weather metrics: temperature, humidity, wind speed, pressure, visibility, sunrise/sunset
+- 5-day/3-hour forecast with hourly and daily aggregations
+- Geolocation support for automatic weather detection
+- Mobile-first responsive design with dark mode support
+- Loading and error state management for better UX
+- API rate limiting with debounced search and response caching
 
-## Technology Stack
+## Setup
 
-### Core
-- **React 19** — Modern UI library with latest features
-- **TypeScript** — Type-safe development
-- **Vite** — Fast build tool and development server
-- **SWC** — High-performance JavaScript/TypeScript compiler
-
-### Styling & UI
-- **Tailwind CSS 4** — Utility-first CSS framework
-- **daisyUI** — Component library for consistent design
-- **Lucide React** — Clean, consistent icon set
-- **Geist Mono Font** — Modern, professional typography
-- **next-themes** — Seamless dark mode implementation
-
-### API & Data
-- **OpenWeatherMap API** — Current weather (`/data/2.5/weather`) and 5-day forecast (`/data/2.5/forecast`)
-
-### Testing & Quality
-- **Vitest** — Fast unit testing framework
-- **ESLint** — Code quality and consistency
-- **GitHub Actions** — Automated CI/CD pipeline
-
-### Deployment
-- **Vercel** — Production hosting with Analytics
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+ and npm
-- OpenWeatherMap API key (free tier) — [Get your key here](https://openweathermap.org/api)
-
-### Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/Jingjing-20/atmos-weather.git
-cd atmos-weather
-```
-
-2. Install dependencies:
 ```bash
 npm install
-```
-
-3. Set up environment variables:
-```bash
 cp .env.example .env
 ```
 
-4. Add your OpenWeatherMap API key to `.env`:
+Add your OpenWeatherMap API key to `.env`:
+
 ```env
 VITE_OPENWEATHER_API_KEY=your_api_key_here
 ```
 
-5. Start the development server:
 ```bash
 npm run dev
 ```
 
-The app will be available at `http://localhost:5173`
-
-## Available Scripts
+## Scripts
 
 | Command | Description |
 | --- | --- |
-| `npm run dev` | Start development server with hot reload |
-| `npm run build` | Run TypeScript checks and create production build |
-| `npm run preview` | Preview production build locally |
-| `npm run lint` | Run ESLint for code quality checks |
-| `npm test` | Run test suite with Vitest |
-
-## Project Structure
-
-```
-src/
-├── components/
-│   ├── weather/         # Weather-specific components
-│   ├── layout/          # Layout components (Header, Dashboard)
-│   └── ui/              # Reusable UI components
-├── hooks/               # Custom React hooks
-├── services/            # API integration and data fetching
-├── types/               # TypeScript type definitions
-└── lib/                 # Utility functions
-```
-
-## Architecture Highlights
-
-**Clean Separation of Concerns:**
-- Components handle presentation and user interaction
-- Custom hooks manage state and side effects
-- Services encapsulate API logic
-- TypeScript types ensure type safety throughout
-
-**Data Flow:**
-```
-User Input → Component → Custom Hook → API Service → OpenWeatherMap → Response Processing → UI Update
-```
-
-## API Key Security Note
-
-This project uses Vite's environment variable system with the `VITE_` prefix. While this keeps the API key out of the git repository (via `.gitignore`), the key is embedded in the client-side bundle at build time and is visible in browser network requests.
-
-**This is an acceptable tradeoff for this portfolio project** because:
-- OpenWeatherMap free tier is rate-limited (60 calls/min, 1M calls/month)
-- No billing information is attached to the API key
-- The key has no access to sensitive data or services
-
-For production applications requiring stricter security, consider implementing a serverless proxy that keeps the API key server-side.
-
-## Deployment
-
-The application is deployed on Vercel with automatic deployments from the `main` branch.
-
-**Important:** When deploying to Vercel, add the `VITE_OPENWEATHER_API_KEY` environment variable in your Vercel project settings:
-1. Go to Project Settings → Environment Variables
-2. Add `VITE_OPENWEATHER_API_KEY` with your API key
-3. Enable for Production, Preview, and Development environments
-4. Redeploy the project
-
-## Continuous Integration
-
-GitHub Actions automatically runs on every push and pull request:
-- TypeScript type checking
-- ESLint code quality checks
-- Vitest test suite
-
-## Features Roadmap
-
-- [x] Current weather display
-- [x] City search functionality
-- [x] Detailed weather metrics
-- [x] Hourly and weekly forecasts
-- [x] Responsive design
-- [x] Dark mode support
-- [ ] Geolocation support (get weather for current location)
-- [ ] Favorite locations
-- [ ] Weather charts and visualizations
-- [ ] Multi-city comparison
-
-## Contributing
-
-This is a portfolio project, but suggestions and feedback are welcome! Feel free to open an issue or submit a pull request.
-
-## License
-
-This project is open source and available under the MIT License.
-
-## Acknowledgments
-
-- Weather data provided by [OpenWeatherMap](https://openweathermap.org/)
-- Icons by [Lucide](https://lucide.dev/)
-- Font by [Geist](https://vercel.com/font)
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run lint` | Run ESLint |
+| `npm test` | Run tests |
