@@ -27,3 +27,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Project context and overview files
+PROJECTS_OVERVIEW.md
+ATMOS_WEATHER_PROJECT_CONTEXT.md
+HANDOFF_*.md
