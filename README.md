@@ -6,7 +6,6 @@ Weather Forecasting Web Application
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![daisyUI](https://img.shields.io/badge/daisyUI-5A0EF8?style=for-the-badge&logo=daisyui&logoColor=white)
 
 ## Description
 
@@ -25,29 +24,3 @@ Demonstrate modern web development skills through a production-ready weather app
 - Mobile-first responsive design with dark mode support
 - Loading and error state management for better UX
 - API rate limiting with debounced search and response caching
-
-## Setup
-
-```bash
-npm install
-cp .env.example .env
-```
-
-Add your OpenWeatherMap API key to `.env`:
-
-```env
-VITE_OPENWEATHER_API_KEY=your_api_key_here
-```
-
-```bash
-npm run dev
-```
-
-## Scripts
-
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run lint` | Run ESLint |
-| `npm test` | Run tests |
