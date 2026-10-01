@@ -16,7 +16,7 @@ A modern, responsive weather application that provides current weather informati
 
 ---
 
-## Features
+Features
 
 - Real-time weather data for any city worldwide with search functionality
 - Detailed weather metrics: temperature, humidity, wind speed, pressure, visibility, sunrise/sunset
@@ -28,7 +28,7 @@ A modern, responsive weather application that provides current weather informati
 
 ---
 
-## Built With
+Built With
 
 - **React** - UI component library
 - **TypeScript** - Type-safe programming language
@@ -37,12 +37,3 @@ A modern, responsive weather application that provides current weather informati
 - **daisyUI** - Component library for Tailwind CSS
 - **Lucide React** - Icon library
 - **OpenWeatherMap API** - Weather data provider
-
-## Scripts
-
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run lint` | Run ESLint |
-| `npm test` | Run tests |
