@@ -37,3 +37,4 @@ Built With
 - **daisyUI** - Component library for Tailwind CSS
 - **Lucide React** - Icon library
 - **OpenWeatherMap API** - Weather data provider
+
